@@ -1,0 +1,56 @@
+diff --git a/build/lib/extensions.ts b/build/lib/extensions.ts
+index c4b0391..d83e17b 100644
+--- a/build/lib/extensions.ts
++++ b/build/lib/extensions.ts
+@@ -141,7 +141,42 @@ function fromLocalNormal(extensionPath: string): Stream {
+ 
+ 	return result.pipe(createStatsStream(path.basename(extensionPath)));
+ }
+ 
++function buildPackagedDependencies(extensionPath: string, dependencies: string[]): Promise<void> {
++	if (process.platform !== 'darwin' || dependencies.length === 0) {
++		return Promise.resolve();
++	}
++
++	return Promise.all(dependencies.map(dependency => {
++		const dependencyPath = path.join(extensionPath, 'node_modules', dependency);
++		const bindingGypPath = path.join(dependencyPath, 'binding.gyp');
++
++		if (!fs.existsSync(bindingGypPath)) {
++			return Promise.resolve();
++		}
++
++		return new Promise<void>((resolve, reject) => {
++			fancyLog(`Building packaged dependency: ${ansiColors.yellow(path.join(path.basename(extensionPath), 'node_modules', dependency))}`);
++
++			const proc = cp.execFile('npm', ['run', 'build', '--if-present'], { cwd: dependencyPath }, error => {
++				if (error) {
++					return reject(error);
++				}
++
++				return resolve();
++			});
++
++			proc.stdout!.on('data', (data) => {
++				fancyLog(`${ansiColors.green('building dependency')}: ${data.toString('utf8')}`);
++			});
++
++			proc.stderr!.on('data', (data) => {
++				fancyLog(`${ansiColors.yellow('building dependency')}: ${data.toString('utf8')}`);
++			});
++		});
++	})).then(() => undefined);
++}
++
+ function fromLocalEsbuild(extensionPath: string, esbuildConfigFileName: string): Stream {
+ 	const vsce = require('@vscodium/vsce') as typeof import('@vscodium/vsce');
+ 	const result = es.through();
+@@ -180,6 +215,8 @@ function fromLocalEsbuild(extensionPath: string, esbuildConfigFileName: string):
+ 		proc.stdout!.on('data', (data) => {
+ 			fancyLog(`${ansiColors.green('esbuilding')}: ${data.toString('utf8')}`);
+ 		});
++	}).then(() => {
++		return buildPackagedDependencies(extensionPath, packagedDependencies);
+ 	}).then(() => {
+ 		// After esbuild completes, collect all files using vsce
+ 		return vsce.listFiles({ cwd: extensionPath, packageManager: vsce.PackageManager.None });
