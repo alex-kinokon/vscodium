@@ -66,6 +66,16 @@ index bbabadc..b454d0e 100644
 -							.join(self.server_params.release.quality.server_entrypoint()),
 +							.join(self.server_params.release.quality.server_entrypoint().unwrap()),
  						&["--version"],
+diff --git a/cli/src/tunnels/agent_host.rs b/cli/src/tunnels/agent_host.rs
+index 1e9ca2b..d6e8c0a 100644
+--- a/cli/src/tunnels/agent_host.rs
++++ b/cli/src/tunnels/agent_host.rs
+@@ -160,4 +160,4 @@ impl AgentHostManager {
+ 				.join(SERVER_FOLDER_NAME)
+ 				.join("bin")
+-				.join(release.quality.server_entrypoint())
++				.join(release.quality.server_entrypoint().unwrap())
+ 		};
 diff --git a/cli/src/tunnels/paths.rs b/cli/src/tunnels/paths.rs
 index 3d7d718..98529bc 100644
 --- a/cli/src/tunnels/paths.rs

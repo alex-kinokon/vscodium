@@ -39,11 +39,11 @@ index bc72a21..ae566c1 100644
 @@ -32,2 +32,3 @@
          "@vscode/windows-registry": "^1.2.0",
 +        "@vscodium/native-keymap": "3.3.7-258424",
-         "@xterm/addon-clipboard": "^0.3.0-beta.191",
+         "@xterm/addon-clipboard": "^0.3.0-beta.197",
 @@ -49,3 +50,2 @@
          "native-is-elevated": "0.9.0",
 -        "native-keymap": "^3.3.5",
-         "node-pty": "^1.2.0-beta.10",
+         "node-pty": "^1.2.0-beta.12",
 @@ -4862,2 +4862,9 @@
      },
 +    "node_modules/@vscodium/native-keymap": {
@@ -97,7 +97,7 @@ index d727d5a..54d14ad 100644
      "native-is-elevated": "0.9.0",
 -    "native-keymap": "^3.3.5",
 +    "@vscodium/native-keymap": "3.3.7-258424",
-     "node-pty": "^1.2.0-beta.10",
+     "node-pty": "^1.2.0-beta.12",
 diff --git a/src/vs/platform/environment/test/node/nativeModules.integrationTest.ts b/src/vs/platform/environment/test/node/nativeModules.integrationTest.ts
 index c30c6da..ca6cea2 100644
 --- a/src/vs/platform/environment/test/node/nativeModules.integrationTest.ts

@@ -353,7 +353,7 @@ new file mode 100644
 index 0000000..8b9689c
 --- /dev/null
 +++ b/src/vs/base/common/font.ts
-@@ -0,0 +1,187 @@
+@@ -0,0 +1,190 @@
 +import { IConfigurationService } from '../../platform/configuration/common/configuration.js';
 +
 +export const FONT = {
@@ -386,6 +386,7 @@ index 0000000..8b9689c
 +	sidebarSize24: 24,
 +	sidebarSize26: 26,
 +	sidebarSize28: 28,
++	sidebarSize30: 30,
 +	sidebarSize34: 34,
 +	sidebarSize39: 39,
 +	sidebarSize44: 44,
@@ -429,6 +430,7 @@ index 0000000..8b9689c
 +const SIDE_BAR_COEFF_24 = 24/13;
 +const SIDE_BAR_COEFF_26 = 26/13;
 +const SIDE_BAR_COEFF_28 = 28/13;
++const SIDE_BAR_COEFF_30 = 30/13;
 +const SIDE_BAR_COEFF_34 = 34/13;
 +const SIDE_BAR_COEFF_39 = 39/13;
 +const SIDE_BAR_COEFF_44 = 44/13;
@@ -520,6 +522,7 @@ index 0000000..8b9689c
 +	FONT.sidebarSize24 = size * SIDE_BAR_COEFF_24;
 +	FONT.sidebarSize26 = size * SIDE_BAR_COEFF_26;
 +	FONT.sidebarSize28 = size * SIDE_BAR_COEFF_28;
++	FONT.sidebarSize30 = size * SIDE_BAR_COEFF_30;
 +	FONT.sidebarSize34 = size * SIDE_BAR_COEFF_34;
 +	FONT.sidebarSize39 = size * SIDE_BAR_COEFF_39;
 +	FONT.sidebarSize44 = size * SIDE_BAR_COEFF_44;
@@ -2477,36 +2480,52 @@ index bcb46c6..0aef82b 100644
 --- a/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessionsViewer.ts
 +++ b/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessionsViewer.ts
 @@ -52,2 +52,3 @@ import { BugIndicatingError } from '../../../../../base/common/errors.js';
- import { ILogService } from '../../../../../platform/log/common/log.js';
+ import { compareIgnoreCase } from '../../../../../base/common/strings.js';
 +import { FONT } from '../../../../../base/common/font.js';
  
-@@ -638,5 +639,2 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
- 
+@@ -838,4 +839 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
+
 -	static readonly ITEM_HEIGHT = 54;
 -	static readonly SECTION_HEIGHT = 26;
 -
- 	constructor(private readonly _approvalModel?: AgentSessionApprovalModel) { }
-@@ -645,6 +643,6 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
+ 	constructor(private readonly _approvalModel?: AgentSessionApprovalModel,
+@@ -847,3 +844,3 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
  		if (isAgentSessionSection(element)) {
 -			return AgentSessionsListDelegate.SECTION_HEIGHT;
 +			return FONT.sidebarSize26;
  		}
- 
+@@ -855,2 +852,2 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
+
 -		let height = AgentSessionsListDelegate.ITEM_HEIGHT;
 +		let height = FONT.sidebarSize54;
  		const approval = this._approvalModel?.getApproval(element.resource).get();
-diff --git a/src/vs/workbench/contrib/chat/browser/chatManagement/chatManagementEditor.ts b/src/vs/workbench/contrib/chat/browser/chatManagement/chatManagementEditor.ts
-index ad2c82a..6cb6bce 100644
---- a/src/vs/workbench/contrib/chat/browser/chatManagement/chatManagementEditor.ts
-+++ b/src/vs/workbench/contrib/chat/browser/chatManagement/chatManagementEditor.ts
-@@ -34,2 +34,3 @@ import { IContextKey, IContextKeyService } from '../../../../../platform/context
- import { CONTEXT_MODELS_EDITOR } from '../../common/constants.js';
+diff --git a/src/vs/workbench/contrib/chat/browser/chatManagement/chatModelsWidget.ts b/src/vs/workbench/contrib/chat/browser/chatManagement/chatModelsWidget.ts
+index 2822197..982fa8c 100644
+--- a/src/vs/workbench/contrib/chat/browser/chatManagement/chatModelsWidget.ts
++++ b/src/vs/workbench/contrib/chat/browser/chatManagement/chatModelsWidget.ts
+@@ -39,10 +39,7 @@ import { CONTEXT_MODELS_SEARCH_FOCUS } from '../../common/constants.js';
+ import { IDialogService } from '../../../../../platform/dialogs/common/dialogs.js';
+ import Severity from '../../../../../base/common/severity.js';
 +import { FONT } from '../../../../../base/common/font.js';
  
-@@ -439,3 +440,3 @@ class SectionItemDelegate implements IListVirtualDelegate<SectionItem> {
- 	getHeight(element: SectionItem) {
--		return 22;
-+		return FONT.sidebarSize22;
+ const $ = DOM.$;
+-
+-const HEADER_HEIGHT = 30;
+-const VENDOR_ROW_HEIGHT = 30;
+-const MODEL_ROW_HEIGHT = 26;
+ 
+ export function getModelHoverContent(model: ILanguageModel): MarkdownString {
+@@ -270,7 +267,9 @@ class ModelsSearchFilterDropdownMenuActionViewItem extends DropdownMenuActionVie
+ }
+ 
+ class Delegate implements ITableVirtualDelegate<IViewModelEntry> {
+-	readonly headerRowHeight = HEADER_HEIGHT;
++	get headerRowHeight(): number {
++		return FONT.sidebarSize30;
++	}
+ 	getHeight(element: IViewModelEntry): number {
+-		return isLanguageModelProviderEntry(element) || isLanguageModelGroupEntry(element) ? VENDOR_ROW_HEIGHT : MODEL_ROW_HEIGHT;
++		return isLanguageModelProviderEntry(element) || isLanguageModelGroupEntry(element) ? FONT.sidebarSize30 : FONT.sidebarSize26;
  	}
 diff --git a/src/vs/workbench/contrib/chat/browser/widget/chatContentParts/chatChangesSummaryPart.ts b/src/vs/workbench/contrib/chat/browser/widget/chatContentParts/chatChangesSummaryPart.ts
 index cc7bb15..f260d0e 100644
