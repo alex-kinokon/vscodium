@@ -2483,8 +2483,8 @@ index bcb46c6..0aef82b 100644
  import { compareIgnoreCase } from '../../../../../base/common/strings.js';
 +import { FONT } from '../../../../../base/common/font.js';
  
-@@ -838,4 +839 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
-
+@@ -838,5 +839,2 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
+ 
 -	static readonly ITEM_HEIGHT = 54;
 -	static readonly SECTION_HEIGHT = 26;
 -
@@ -2494,8 +2494,8 @@ index bcb46c6..0aef82b 100644
 -			return AgentSessionsListDelegate.SECTION_HEIGHT;
 +			return FONT.sidebarSize26;
  		}
-@@ -855,2 +852,2 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
-
+@@ -855,3 +852,3 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
+ 
 -		let height = AgentSessionsListDelegate.ITEM_HEIGHT;
 +		let height = FONT.sidebarSize54;
  		const approval = this._approvalModel?.getApproval(element.resource).get();
@@ -3996,7 +3996,7 @@ index 9e6ca13..478e4e7 100644
 @@ -62,2 +61,3 @@ import { toErrorMessage } from '../../../../base/common/errorMessage.js';
  import { ILogService } from '../../../../platform/log/common/log.js';
 +import { FONT } from '../../../../base/common/font.js';
- 
+ import { canShowAgentsBanner, createAgentsBanner } from '../../chat/browser/agentSessions/agentSessionsBanner.js';
 @@ -826,3 +826,3 @@ export class AgentSessionsWelcomePage extends EditorPane {
  		);
 -		const sessionsHeight = visibleSessions * AgentSessionsListDelegate.ITEM_HEIGHT;

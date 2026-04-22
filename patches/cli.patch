@@ -93,7 +93,7 @@ index 55f1dad..3b7ef5c 100644
  use crate::{
 -	constants::VSCODE_CLI_UPDATE_ENDPOINT,
 +	constants::{VSCODE_CLI_APP_NAME, VSCODE_CLI_DOWNLOAD_ENDPOINT, VSCODE_CLI_UPDATE_ENDPOINT},
- 	debug, log, options, spanf,
+ 	log, options,
 @@ -18,3 +18,3 @@ use crate::{
  		zipper,
 -	},
