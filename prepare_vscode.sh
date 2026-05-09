@@ -14,6 +14,53 @@ cp -f LICENSE vscode/LICENSE.txt
 cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
 rm -rf extensions/copilot
+rm -f \
+  src/vs/platform/agentHost/node/copilot/copilotAgent.ts \
+  src/vs/platform/agentHost/node/copilot/copilotAgentSession.ts \
+  src/vs/platform/agentHost/node/copilot/copilotPluginConverters.ts \
+  src/vs/platform/agentHost/node/copilot/copilotSessionWrapper.ts \
+  src/vs/platform/agentHost/node/copilot/copilotShellTools.ts \
+  src/vs/platform/agentHost/test/node/copilotAgent.test.ts \
+  src/vs/platform/agentHost/test/node/copilotAgentSession.test.ts \
+  src/vs/platform/agentHost/test/node/copilotPluginConverters.test.ts \
+  src/vs/platform/agentHost/test/node/copilotShellTools.test.ts
+
+jsonTmp="$( jq '
+  .scripts.watch |= gsub(" watch-copilot"; "") |
+  del(
+    .scripts["watch-copilot"],
+    .scripts["watch-copilotd"],
+    .scripts["kill-watch-copilotd"],
+    .scripts["copilot:setup"],
+    .scripts["copilot:get_token"],
+    .dependencies["@anthropic-ai/sandbox-runtime"],
+    .dependencies["@github/copilot"],
+    .dependencies["@github/copilot-sdk"]
+  )
+' package.json )"
+echo "${jsonTmp}" > package.json && unset jsonTmp
+
+jsonTmp="$( jq '
+  del(
+    .packages[""].dependencies["@anthropic-ai/sandbox-runtime"],
+    .packages[""].dependencies["@github/copilot"],
+    .packages[""].dependencies["@github/copilot-sdk"],
+    .packages["node_modules/@anthropic-ai/sandbox-runtime"],
+    .packages["node_modules/@github/copilot"],
+    .packages["node_modules/@github/copilot-darwin-arm64"],
+    .packages["node_modules/@github/copilot-darwin-x64"],
+    .packages["node_modules/@github/copilot-linux-arm64"],
+    .packages["node_modules/@github/copilot-linux-x64"],
+    .packages["node_modules/@github/copilot-sdk"],
+    .packages["node_modules/@github/copilot-sdk/node_modules/zod"],
+    .packages["node_modules/@github/copilot-win32-arm64"],
+    .packages["node_modules/@github/copilot-win32-x64"],
+    .dependencies["@anthropic-ai/sandbox-runtime"],
+    .dependencies["@github/copilot"],
+    .dependencies["@github/copilot-sdk"]
+  )
+' package-lock.json )"
+echo "${jsonTmp}" > package-lock.json && unset jsonTmp
 
 { set +x; } 2>/dev/null
 
@@ -177,6 +224,11 @@ for file in ../patches/user/*.patch; do
   fi
 done
 # }}}
+
+if [[ "${PATCH_VALIDATE_ONLY}" == "yes" ]]; then
+  echo "Patch validation complete"
+  exit 0
+fi
 
 set -x
 

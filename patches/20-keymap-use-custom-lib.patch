@@ -44,7 +44,7 @@ index 75b98719..88c2aee4 100644
          "native-is-elevated": "0.9.0",
 -        "native-keymap": "^3.3.5",
          "node-pty": "^1.2.0-beta.12",
-@@ -4168,2 +4168,9 @@
+@@ -4139,2 +4139,9 @@
      },
 +    "node_modules/@vscodium/native-keymap": {
 +      "version": "3.3.7-258424",
@@ -53,7 +53,7 @@ index 75b98719..88c2aee4 100644
 +      "hasInstallScript": true,
 +      "license": "MIT"
 +    },
-     "node_modules/@wdio/config": {
+     "node_modules/@webgpu/types": {
 @@ -14280,5 +14287,6 @@
      "node_modules/napi-build-utils": {
 -      "version": "1.0.2",

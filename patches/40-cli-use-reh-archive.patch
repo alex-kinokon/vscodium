@@ -75,16 +75,6 @@ index bbabadcf..b454d0ea 100644
 -							.join(self.server_params.release.quality.server_entrypoint()),
 +							.join(self.server_params.release.quality.server_entrypoint().unwrap()),
  						&["--version"],
-diff --git a/cli/src/tunnels/agent_host.rs b/cli/src/tunnels/agent_host.rs
-index 1e9ca2b..d6e8c0a 100644
---- a/cli/src/tunnels/agent_host.rs
-+++ b/cli/src/tunnels/agent_host.rs
-@@ -160,4 +160,4 @@ impl AgentHostManager {
- 				.join(SERVER_FOLDER_NAME)
- 				.join("bin")
--				.join(release.quality.server_entrypoint())
-+				.join(release.quality.server_entrypoint().unwrap())
- 		};
 diff --git a/cli/src/tunnels/paths.rs b/cli/src/tunnels/paths.rs
 index 3d7d718a..98529bc6 100644
 --- a/cli/src/tunnels/paths.rs
@@ -121,8 +111,8 @@ index 55f1dadc..3b7ef5c4 100644
  fn get_update_endpoint() -> Result<String, CodeError> {
 @@ -66,3 +74,3 @@ fn get_update_endpoint() -> Result<String, CodeError> {
  		.map(|s| s.to_string())
--		.ok_or_else(|| CodeError::UpdatesNotConfigured("no service url"))
-+		.ok_or_else(|| CodeError::UpdatesNotConfigured("no update url"))
+-		.ok_or(CodeError::UpdatesNotConfigured("no service url"))
++		.ok_or(CodeError::UpdatesNotConfigured("no update url"))
  }
 @@ -74,3 +82,4 @@ impl UpdateService {
  
@@ -153,7 +143,7 @@ index 55f1dadc..3b7ef5c4 100644
 -		debug!(self.log, "Resolved version {} to {}", version, res.version);
 +		debug!(self.log, "Resolved quality {} to {}", quality, res.version);
  
-@@ -115,40 +120,17 @@ impl UpdateService {
+@@ -115,36 +120,17 @@ impl UpdateService {
  
 -	/// Gets the latest commit for the target of the given quality.
 -	pub async fn get_latest_commit(
@@ -184,11 +174,7 @@ index 55f1dadc..3b7ef5c4 100644
 +			release.name,
  		);
  
--		let mut response = spanf!(
--			self.log,
--			self.log.span("server.version.resolve"),
--			self.client.make_request("GET", download_url)
--		)?;
+-		let mut response = self.client.make_request("GET", download_url).await?;
 -
 -		if !response.status_code.is_success() {
 -			return Err(response.into_err().await.into());

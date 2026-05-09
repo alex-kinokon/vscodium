@@ -21,11 +21,11 @@ diff --git a/src/vs/workbench/contrib/chat/browser/chat.contribution.ts b/src/vs
 index 7e9c73f6..03da6f20 100644
 --- a/src/vs/workbench/contrib/chat/browser/chat.contribution.ts
 +++ b/src/vs/workbench/contrib/chat/browser/chat.contribution.ts
-@@ -1420,3 +1420,3 @@ configurationRegistry.registerConfiguration({
+@@ -1491,3 +1491,3 @@ configurationRegistry.registerConfiguration({
  			description: nls.localize('chat.disableAIFeatures', "Disable and hide built-in AI features provided by GitHub Copilot, including chat and inline suggestions."),
 -			default: false,
 +			default: true,
- 			scope: ConfigurationScope.WINDOW
+ 			scope: ConfigurationScope.WINDOW,
 diff --git a/src/vs/workbench/contrib/chat/browser/chatParticipant.contribution.ts b/src/vs/workbench/contrib/chat/browser/chatParticipant.contribution.ts
 index 8ac8f531..f56d3e96 100644
 --- a/src/vs/workbench/contrib/chat/browser/chatParticipant.contribution.ts

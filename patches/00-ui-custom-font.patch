@@ -2479,8 +2479,10 @@ diff --git a/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessionsVi
 index bcb46c6..0aef82b 100644
 --- a/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessionsViewer.ts
 +++ b/src/vs/workbench/contrib/chat/browser/agentSessions/agentSessionsViewer.ts
-@@ -52,2 +52,3 @@ import { BugIndicatingError } from '../../../../../base/common/errors.js';
+@@ -53,4 +53,5 @@ import { BugIndicatingError } from '../../../../../base/common/errors.js';
  import { compareIgnoreCase } from '../../../../../base/common/strings.js';
+ import { CancellationTokenSource } from '../../../../../base/common/cancellation.js';
+ import { IChatSessionsService } from '../../common/chatSessionsService.js';
 +import { FONT } from '../../../../../base/common/font.js';
  
 @@ -838,5 +839,2 @@ export class AgentSessionsListDelegate implements IListVirtualDelegate<AgentSess
